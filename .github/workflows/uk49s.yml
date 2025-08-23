@@ -1,0 +1,33 @@
+name: UK49s Predictor
+
+on:
+  schedule:
+    - cron: '0 11 * * *'   # Lunchtime draw 12:00 UK
+    - cron: '0 16 * * *'   # Teatime draw 17:00 UK
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run prediction script
+        run: python predict.py
+
+      - name: Commit predictions
+        run: |
+          git config --global user.name "Tiisetso Aron"
+          git config --global user.email "aronwamtseba@gmail.com"
+          git add predictions.txt
+          git commit -m "Add today's prediction"
+          git push
