@@ -1,0 +1,1 @@
+Today's UK49s Prediction: [np.int64(1), np.int64(26), np.int64(29), np.int64(31), np.int64(35), np.int64(45)]
