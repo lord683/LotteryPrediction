@@ -1,12 +1,56 @@
+import os
 import pandas as pd
+import numpy as np
+from tensorflow.keras import layers, models
+from tensorflow.keras.callbacks import ModelCheckpoint
+from datetime import datetime
 
-# Load historical data
-df = pd.read_csv('data/uk49s_history.csv')
+# --- Paths ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "data", "uk49s_history.csv")
+MODEL_FILE = os.path.join(BASE_DIR, "model.h5")
+OUTPUT_FILE = os.path.join(BASE_DIR, "predictions.txt")
 
-# Simple prediction logic example (last draw numbers)
-last_draw = df.iloc[-1, 1:].tolist()  # skip date column
-predicted_numbers = last_draw  # For demo, just repeat last draw
+# --- Load data ---
+data = pd.read_csv(DATA_FILE)
 
-# Save predictions to a file
-with open("predictions.txt", "w") as f:
-    f.write(f"Today's UK49s Prediction: {predicted_numbers}\n")
+# --- One-hot encode numbers ---
+def to_vector(numbers, max_num=49):
+    vector = np.zeros(max_num)
+    for n in numbers:
+        if n > 0:
+            vector[n-1] = 1
+    return vector
+
+X = np.array([to_vector(numbers) for numbers in data.iloc[:, 1:].values])
+y = np.array([to_vector(numbers) for numbers in data.iloc[:, 1:].shift(-1).fillna(0).values])
+
+# --- Define Transformer model ---
+inputs = layers.Input(shape=(49,))
+transformer_layer = layers.MultiHeadAttention(num_heads=8, key_dim=64)
+x = transformer_layer(inputs, inputs)
+x = layers.Dropout(0.1)(x)
+x = layers.LayerNormalization(epsilon=1e-6)(inputs + x)
+x = layers.Dense(128, activation='relu')(x)
+outputs = layers.Dense(49, activation='softmax')(x)
+
+model = models.Model(inputs=[inputs], outputs=[outputs])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# --- Checkpoint ---
+checkpoint = ModelCheckpoint(MODEL_FILE, save_best_only=True, save_weights_only=True, monitor='val_loss', mode='min')
+
+# --- Train model ---
+model.fit(X, y, batch_size=64, epochs=50, validation_split=0.1, callbacks=[checkpoint])
+
+# --- Predict next draw ---
+last_draw_vector = X[-1].reshape(1, -1)
+predicted_vector = model.predict(last_draw_vector)[0]
+predicted_numbers = [i+1 for i, v in enumerate(predicted_vector) if v > 0.5]
+
+# --- Save prediction ---
+timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+with open(OUTPUT_FILE, "a") as f:
+    f.write(f"{timestamp} Prediction: {predicted_numbers}\n")
+
+print(f"[+] Prediction saved: {predicted_numbers}")
