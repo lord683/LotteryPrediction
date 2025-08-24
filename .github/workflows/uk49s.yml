@@ -15,31 +15,23 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.8"  # Change to a more stable version if necessary
+        python-version: "3.9"  # ✅ Use 3.9 (better TensorFlow support)
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION
-      run: |
-        echo "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python" >> $GITHUB_ENV
-
     - name: Run prediction
-      run: python predict.py  # Run your prediction script
+      run: python predict.py
 
     - name: Commit predictions
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
-        
-        # Pull the latest changes from the remote to avoid conflicts
-        git pull origin master || echo "No changes to pull"
-        
-        # Stage and commit changes
+
+        git pull --rebase origin master || echo "No changes to pull"
+
         git add predictions.txt
         git commit -m "Add new prediction" || echo "No changes to commit"
-        
-        # Push the committed changes
-        git push origin master  # Adjust this to 'main' if your default branch is 'main'
+        git push origin master
