@@ -1,43 +1,35 @@
-name: Lottery Prediction
+name: UK49s Money Bot
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger
   schedule:
-    - cron: "0 11,16 * * *"   # 11:00 & 16:00 UTC
+    - cron: "0 */6 * * *"  # Runs every 6 hours UTC
 
 jobs:
-  run:
+  run-bot:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Install deps
-        run: |
-          python -m pip install -U pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Make prediction
-        env:
-          BANKROLL_START: "1000"      # first run only
-          STAKE_STRATEGY: "simple_conf"  # or "fixed_pct"
-          FIXED_PCT: "0.02"
-          MAX_STAKE_PCT: "0.05"
-          FREQ_WINDOW: "120"
-          RECENCY_DECAY: "0.97"
-          MOMENTUM_WINDOW: "30"
-        run: |
-          python uk49s_money_bot.py
+    - name: Run UK49s bot
+      run: python predict.py  # <-- your actual bot file
 
-      - name: Commit outputs
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git pull --rebase origin master || true
-          git add predictions.txt logs/bankroll.csv
-          git commit -m "Update prediction & bankroll" || echo "No changes"
-          git push origin master || echo "No push"
+    - name: Commit predictions
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git pull origin master || echo "No changes to pull"
+        git add predictions.txt
+        git commit -m "Add new prediction" || echo "No changes to commit"
+        git push origin master
