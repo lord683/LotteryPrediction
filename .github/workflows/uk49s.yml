@@ -1,37 +1,43 @@
 name: Lottery Prediction
 
 on:
-  workflow_dispatch:  # Manually trigger the workflow
+  workflow_dispatch:
   schedule:
-    - cron: "0 11,16 * * *"  # Runs at 11:00 & 16:00 UTC daily
+    - cron: "0 11,16 * * *"   # 11:00 & 16:00 UTC
 
 jobs:
-  build:
+  run:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3  # Checkout the repository
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.9"  # ✅ Use 3.9 (better TensorFlow support)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
 
-    - name: Run prediction
-      run: python predict.py
+      - name: Make prediction
+        env:
+          BANKROLL_START: "1000"      # first run only
+          STAKE_STRATEGY: "simple_conf"  # or "fixed_pct"
+          FIXED_PCT: "0.02"
+          MAX_STAKE_PCT: "0.05"
+          FREQ_WINDOW: "120"
+          RECENCY_DECAY: "0.97"
+          MOMENTUM_WINDOW: "30"
+        run: |
+          python uk49s_money_bot.py
 
-    - name: Commit predictions
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-
-        git pull --rebase origin master || echo "No changes to pull"
-
-        git add predictions.txt
-        git commit -m "Add new prediction" || echo "No changes to commit"
-        git push origin master
+      - name: Commit outputs
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git pull --rebase origin master || true
+          git add predictions.txt logs/bankroll.csv
+          git commit -m "Update prediction & bankroll" || echo "No changes"
+          git push origin master || echo "No push"
