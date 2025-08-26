@@ -1,9 +1,9 @@
-name: Lottery Prediction
+name: Lottery AI
 
 on:
   push:
-    branches: [ "main" ]   # runs on push to main branch
-  workflow_dispatch:       # allows manual run button in Actions tab
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,13 +16,23 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.10"   # ✅ use 3.9 or 3.10 for TensorFlow
+        python-version: "3.10"
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run prediction script
+    - name: Train Models
+      run: |
+        python train.py
+
+    - name: Predict Next Draws
       run: |
         python predict.py
+
+    - name: Upload Predictions Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: lottery-predictions
+        path: predictions.txt
