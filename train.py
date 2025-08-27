@@ -1,59 +1,55 @@
+# train.py
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import ModelCheckpoint
+import os
 
-VECTOR_SIZE = 49
-TOP_N = 6
+CSV_FILE = "history.csv"
 
-def to_vector(numbers):
-    vec = np.zeros(VECTOR_SIZE)
+# 1️⃣ Load CSV safely
+data = pd.read_csv(CSV_FILE, delimiter=",")
+print("Columns detected:", data.columns.tolist())
+
+# 2️⃣ Convert numbers to one-hot vectors (size 49)
+def to_vector(numbers, max_num=49):
+    vec = np.zeros(max_num)
     for n in numbers:
-        if 0 < n <= VECTOR_SIZE:
-            vec[n-1] = 1
+        vec[n-1] = 1
     return vec
 
-def build_model():
-    inputs = layers.Input(shape=(VECTOR_SIZE,))
-    x = layers.Reshape((1, VECTOR_SIZE))(inputs)
-    attn = layers.MultiHeadAttention(num_heads=4, key_dim=8)(x, x)
-    x = layers.Add()([x, attn])
-    x = layers.LayerNormalization()(x)
-    x = layers.Dense(128, activation='relu')(x)
-    x = layers.Flatten()(x)
-    outputs = layers.Dense(VECTOR_SIZE, activation='softmax')(x)
+# 3️⃣ Prepare dataset for a given draw_type
+def prepare_data(draw_type):
+    subset = data[data["draw_type"] == draw_type].reset_index(drop=True)
+    X = np.array([to_vector(row[["n1","n2","n3","n4","n5","n6"]].values) for idx,row in subset.iterrows()])
+    # Predict next draw
+    y_raw = subset[["n1","n2","n3","n4","n5","n6"]].shift(-1).fillna(0).astype(int)
+    y = np.array([to_vector(row.values) for idx,row in y_raw.iterrows()])
+    return X, y
+
+# 4️⃣ Build simple model
+def build_model(input_dim=49):
+    inputs = layers.Input(shape=(input_dim,))
+    x = layers.Dense(128, activation='relu')(inputs)
+    x = layers.Dropout(0.1)(x)
+    x = layers.Dense(64, activation='relu')(x)
+    outputs = layers.Dense(input_dim, activation='softmax')(x)
     model = models.Model(inputs, outputs)
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
-# Load CSV and fix columns
-data = pd.read_csv("data.csv")
-data.columns = [col.strip().lower() for col in data.columns]
-print("Columns detected:", data.columns.tolist())
-
+# 5️⃣ Train and save model for both draw types
 for draw_type in ["teatime", "lunchtime"]:
-    print(f"\nTraining model for {draw_type} draws...")
-    subset = data[data["draw_type"] == draw_type].reset_index(drop=True)
-    
-    X = np.array([to_vector(row[['n1','n2','n3','n4','n5','n6']].values) for _, row in subset.iterrows()])
-    y = np.array([to_vector(row[['n1','n2','n3','n4','n5','n6']].values) for _, row in subset.shift(-1).dropna().iterrows()])
-    
+    print(f"Training model for {draw_type} draws...")
+    X, y = prepare_data(draw_type)
+    if len(X) < 2:
+        print(f"Not enough data for {draw_type}, skipping...")
+        continue
+
     model = build_model()
-    model.summary()
+    checkpoint_path = f"model_{draw_type}.weights.h5"
+    checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True, monitor='loss', mode='min')
     
-    checkpoint = ModelCheckpoint(
-        f"model_{draw_type}.h5",
-        save_best_only=True,
-        monitor="val_loss",
-        mode="min"
-    )
-    
-    model.fit(
-        X[:len(y)], y,
-        batch_size=64,
-        epochs=50,
-        validation_split=0.1,
-        callbacks=[checkpoint]
-    )
-    
-    print(f"✅ {draw_type.capitalize()} model trained and saved as model_{draw_type}.h5")
+    model.fit(X, y, batch_size=4, epochs=50, callbacks=[checkpoint], verbose=1)
+    print(f"✅ {draw_type} model trained and saved: {checkpoint_path}")
