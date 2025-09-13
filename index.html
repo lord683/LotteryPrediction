@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ethereal Ink Studios | AI-Powered Technology Solutions</title>
+  <meta name="description" content="Ethereal Ink Studios is South Africa's premier AI and technology studio. We create innovative tools, bots, and applications to empower businesses and individuals." />
+  <meta name="keywords" content="AI technology, automation tools, job search automation, Forex trading bots, weather applications, AI chatbots, South African tech"/>
+  <meta name="author" content="Ethereal Ink Studios">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2563EB">
+
+  <!-- Social Preview -->
+  <meta property="og:title" content="Ethereal Ink Studios | AI-Powered Technology Solutions">
+  <meta property="og:description" content="Innovative AI tools, automation solutions, and cutting-edge applications developed in South Africa." />
+  <meta property="og:image" content="Preview4.jpg">
+  <meta property="og:url" content="https://etherealinkbytiisetso.com">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ethereal Ink Studios | Innovative AI Solutions">
+  <meta name="twitter:description" content="Cutting-edge AI tools and automation solutions developed in South Africa.">
+  <meta name="twitter:image" content="Preview4.jpg">
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --secondary: #10B981;
+      --dark: #1F2937;
+      --darker: #111827;
+      --light: #F9FAFB;
+      --gray: #6B7280;
+      --accent: #8B5CF6;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header */
+    header {
+      background: rgba(31, 41, 55, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+    }
+    
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    /* Hero Section */
+    .hero {
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #D1D5DB;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+    
+    /* Products Grid */
+    .products {
+      padding: 60px 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 50px;
+      color: var(--light);
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .product-card {
+      background: rgba(31, 41, 55, 0.6);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+      border-color: var(--primary);
+    }
+    
+    .product-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    
+    .product-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--light);
+    }
+    
+    .product-card p {
+      color: #D1D5DB;
+      margin-bottom: 20px;
+    }
+    
+    .product-link {
+      display: inline-block;
+      padding: 12px 25px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .product-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+    }
+    
+    /* Chat Bot */
+    .chat-bot {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+    
+    .chat-toggle {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .chat-toggle:hover {
+      transform: scale(1.1);
+    }
+    
+    .chat-box {
+      width: 350px;
+      background: var(--dark);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-header {
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-header h3 {
+      color: white;
+      font-size: 1.2rem;
+    }
+    
+    .chat-close {
+      color: white;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .chat-log {
+      height: 250px;
+      padding: 15px;
+      overflow-y: auto;
+      background: var(--darker);
+    }
+    
+    .bot-message, .user-message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+    }
+    
+    .bot-message {
+      background: rgba(37, 99, 235, 0.1);
+      border-left: 3px solid var(--primary);
+      text-align: left;
+      margin-right: auto;
+    }
+    
+    .user-message {
+      background: rgba(16, 185, 129, 0.1);
+      border-right: 3px solid var(--secondary);
+      text-align: right;
+      margin-left: auto;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      padding: 15px;
+      background: var(--dark);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--darker);
+      color: white;
+    }
+    
+    .chat-send {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 15px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    
+    .typing-indicator {
+      color: var(--gray);
+      font-style: italic;
+      padding: 5px 15px;
+      display: none;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--darker);
+      padding: 50px 0 20px;
+      margin-top: 80px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-section h3 {
+      color: var(--light);
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    
+    .footer-section p {
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--gray);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .chat-box {
+        width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="Preview4.jpg" alt="Ethereal Ink Studios Logo">
+          <div class="logo-text">Ethereal Ink Studios</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Innovative AI Solutions for Modern Challenges</h1>
+      <p>Ethereal Ink Studios develops cutting-edge AI tools, automation solutions, and applications to empower businesses and individuals across Africa and beyond.</p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products">
+    <div class="container">
+      <h2 class="section-title">Our Products</h2>
+      
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <h3>JobSniper X</h3>
+          <p>Advanced job search automation tool that streamlines your job application process with intelligent CV matching.</p>
+          <a href="https://job.etherealinkbytiisetso.com" class="product-link" target="_blank">Explore</a>
+        </div>
+        
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Forex Bot Hub</h3>
+          <p>Sophisticated Forex trading bots with precision algorithms designed for optimal market performance.</p>
+          <a href="https://forex.etherealinkbytiisetso.com" class="product-link" target="_blank">Explore</a>
+        </div>
+        
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-cloud-sun"></i>
+          </div>
+          <h3>Weather Application</h3>
+          <p>Elegant weather app with intuitive design and accurate forecasts for planning your daily activities.</p>
+          <a href="https://flyingaround.my.canva.site/stylish-weather-landing-page-with-ethereal-background" class="product-link" target="_blank">Explore</a>
+        </div>
+        
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <h3>DAGO Utilities</h3>
+          <p>Specialized tools and utilities for enhanced productivity and unique digital solutions.</p>
+          <a href="https://flyingaround.my.canva.site/dago2eusmbk" class="product-link" target="_blank">Explore</a>
+        </div>
+        
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-gamepad"></i>
+          </div>
+          <h3>Flying Game</h3>
+          <p>Immersive flying experience with beautiful visuals and engaging gameplay mechanics.</p>
+          <a href="https://flyingaround.my.canva.site/custom-flying-plane-game-concept" class="product-link" target="_blank">Explore</a>
+        </div>
+        
+        <div class="product-card">
+          <div class="product-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3>TitiBrain AI</h3>
+          <p>Advanced AI assistant designed to provide intelligent responses and support for various tasks.</p>
+          <a href="https://titibrain-ai.vercel.app" class="product-link" target="_blank">Explore</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Bot -->
+  <div class="chat-bot">
+    <div class="chat-toggle" id="chatToggle">
+      <i class="fas fa-comment"></i>
+    </div>
+    
+    <div class="chat-box" id="chatBox">
+      <div class="chat-header">
+        <h3>Falcon AI Assistant</h3>
+        <button class="chat-close" id="chatClose">&times;</button>
+      </div>
+      
+      <div class="chat-log" id="chatLog">
+        <div class="bot-message">
+          <strong>Falcon AI:</strong> Hello! I'm Falcon, your AI assistant. How can I help you today?
+        </div>
+      </div>
+      
+      <div class="typing-indicator" id="typingIndicator">
+        Typing<span id="dots">...</span>
+      </div>
+      
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+        <button class="chat-send" id="chatSend">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Ethereal Ink Studios</h3>
+          <p>Creating innovative AI solutions and tools to empower individuals and businesses across Africa.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Connect With Us</h3>
+          <p>Email: contact@etherealink.com</p>
+          <p>Location: South Africa</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Our Mission</h3>
+          <p>To develop accessible, powerful technology solutions that solve real-world problems and create opportunities.</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 Ethereal Ink Studios. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Chat bot functionality
+    const chatToggle = document.getElementById('chatToggle');
+    const chatBox = document.getElementById('chatBox');
+    const chatClose = document.getElementById('chatClose');
+    const chatLog = document.getElementById('chatLog');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const dots = document.getElementById('dots');
+
+    let dotsInterval;
+    
+    function startDots() {
+      let count = 0;
+      dotsInterval = setInterval(() => {
+        dots.textContent = '.'.repeat(count % 4);
+        count++;
+      }, 400);
+    }
+    
+    function stopDots() {
+      clearInterval(dotsInterval);
+      dots.textContent = '';
+    }
+
+    const replies = {
+      ethereal: "Ethereal Ink Studios is an AI and technology development company based in South Africa, focused on creating innovative solutions for businesses and individuals.",
+      jobs: "JobSniper X is our advanced job search automation tool that helps streamline the job application process with intelligent CV matching and application filling.",
+      forex: "Our Forex Bot Hub provides sophisticated trading algorithms designed to assist with market analysis and precision trading decisions.",
+      dago: "The DAGO Utilities suite offers specialized tools for enhanced productivity and unique digital solutions.",
+      titi: "Titi is the lead developer and visionary behind Ethereal Ink Studios, creating innovative AI and technology solutions.",
+      falcon: "I'm Falcon, your AI assistant. I can help answer questions about our products, services, and technology.",
+      game: "Our Flying Game offers an immersive experience with beautiful visuals and engaging gameplay mechanics.",
+      help: "I can help with information about our products: JobSniper X, Forex bots, Weather app, DAGO Utilities, Flying Game, or TitiBrain AI.",
+      use: "You can explore any of our products by clicking on the cards above. Each product has its own dedicated platform.",
+      default: "I'm sorry, I didn't understand that. Please ask about our products, services, or company."
+    };
+
+    function addMessage(message, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add(type);
+      messageDiv.innerHTML = `<strong>${type === 'bot-message' ? 'Falcon AI:' : 'You:'}</strong> ${message}`;
+      chatLog.appendChild(messageDiv);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    async function botReply(message) {
+      typingIndicator.style.display = "block";
+      startDots();
+      
+      // Simulate typing delay
+      await new Promise(resolve => setTimeout(resolve, 1300));
+      
+      stopDots();
+      typingIndicator.style.display = "none";
+
+      const m = message.toLowerCase();
+      let response = replies.default;
+      
+      if (m.includes("ethereal")) response = replies.ethereal;
+      else if (m.includes("job")) response = replies.jobs;
+      else if (m.includes("forex")) response = replies.forex;
+      else if (m.includes("dago")) response = replies.dago;
+      else if (m.includes("game")) response = replies.game;
+      else if (m.includes("falcon")) response = replies.falcon;
+      else if (m.includes("titi")) response = replies.titi;
+      else if (m.includes("use") || m.includes("how")) response = replies.use;
+      else if (m.includes("help")) response = replies.help;
+      else if (m.trim() === "") response = "Please type a message so I can help you!";
+
+      addMessage(response, 'bot-message');
+    }
+
+    chatToggle.addEventListener('click', () => {
+      chatBox.style.display = 'block';
+    });
+
+    chatClose.addEventListener('click', () => {
+      chatBox.style.display = 'none';
+    });
+
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (message) {
+        addMessage(message, 'user-message');
+        chatInput.value = '';
+        botReply(message);
+      }
+    }
+
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    chatSend.addEventListener('click', sendMessage);
+  </script>
+</body>
+</html>
